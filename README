@@ -1,0 +1,3 @@
+Version 0.1
+	- Basic concurent data structures 
+	- Support for x86 atomic ops
