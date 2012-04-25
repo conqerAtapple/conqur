@@ -1,21 +1,10 @@
 #ifndef LFQUEUE_H
 #define LFQUEUE_H
 
-
+// local include files in 
+// alphabetic order
+#include "atomic.h"
 #include "Logger.h"
-
-#define cas(ptr, old, new) \
-({  \
-    unsigned long  __ret;                                                                       \
-    unsigned long  __new = reinterpret_cast<unsigned long>(new); \
-    unsigned long  __old = reinterpret_cast<unsigned long>(old);     \
-    volatile unsigned long *__ptr = (volatile unsigned long *)(ptr);      \
-    asm volatile( "lock cmpxchgl %2,%1"                                               \
-			     : "=a" (__ret), "+m" (*__ptr)      \
-                 : "r" (__new), "0" (__old)            \
-                 : "memory");                           \
-                 (__ret == __old) ; \
-})
 
 struct RefCount
 {
@@ -44,11 +33,9 @@ struct RefCount
     bool decAndTest()
     {
         unsigned char c;
-        debug("count :%u", count);
         asm volatile( "lock;decl %0; sete %1"
                       : "+m" (count), "=qm" (c)
                       : : "memory");
-        debug("c :%u, count :%u", c, count);
         return c != 0;
     }
 
@@ -64,7 +51,7 @@ struct Node
     next(NULL),
     rc(1)
     {
-        debug("creating %d", value);
+        debug("creating ") <<  value ;
     }
 
     Node(const T& v):
@@ -72,7 +59,7 @@ struct Node
     next(NULL),
     rc(1)
     {
-        debug("creating %d", value);
+        
     }
 
     T value;
@@ -93,8 +80,8 @@ struct Node
     void put()
     {
         if (rc.decAndTest())
-        {
-            debug("deleting %d", value);
+        {            
+            debug("deleting ") << value ;
             delete this;
         }
     }
@@ -197,11 +184,11 @@ public:
 
     void print()
     {
-        debug("list :"); 
+        debug("list:");
         Node<T> *curr = head->next;
         while (curr != NULL && curr->get())
         {
-            debug("value :%d", curr->value); 
+            //debug("value :%d", curr->value); 
             curr = curr->next;
         }
     }

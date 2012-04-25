@@ -7,4 +7,4 @@ add_subdirectory(tests)
 SET ( CMAKE_CXX_FLAGS  "-pthread" )
 SET ( CMAKE_EXE_LINKER_FLAGS  "-pthread" )
 
-#TARGET_LINK_LIBRARIES(tests pthreads)
+TARGET_LINK_LIBRARIES(conqur)

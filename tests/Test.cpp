@@ -30,18 +30,16 @@ void* run_enq(void*)
 
 void* run_deq(void*)
 {
-   
-
     for(int i = 0; i <100; i++)
     {
         int o;
         if(lfq.deq(o))
         {
-            debug("dequed %d", o);
+            debug("dequed: ") << o ;//<< eol;
         }
         else
         {
-            debug("dequed none");
+            debug("dequed none") ;//<< eol;
         }
     }
 }
@@ -92,6 +90,7 @@ void testIntervalTree()
 
 int main()
 {
+   
     testLfQueue();
     return 0;
 }

@@ -1,3 +1,9 @@
 Version 0.1
 	- Basic concurent data structures 
 	- Support for x86 atomic ops
+
+
+Build:
+	- Install cmake
+	- do "cmake ." form the top of source tree
+	- do "make" 
