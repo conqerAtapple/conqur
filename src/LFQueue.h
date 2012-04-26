@@ -5,42 +5,7 @@
 // alphabetic order
 #include "atomic.h"
 #include "Logger.h"
-
-struct RefCount
-{
-    RefCount(unsigned c):
-    count(c)
-    {
-    }
-
-    unsigned value()
-    {
-        return(*(volatile int *)&count);
-    }
-
-    void dec()
-    {
-        asm volatile( "lock;decl %0"
-                      : "+m" (count));
-    }
-
-    void inc()
-    {
-        asm volatile( "lock;incl %0"
-                      : "+m" (count));
-    }
-
-    bool decAndTest()
-    {
-        unsigned char c;
-        asm volatile( "lock;decl %0; sete %1"
-                      : "+m" (count), "=qm" (c)
-                      : : "memory");
-        return c != 0;
-    }
-
-    unsigned count;
-};
+#include "RefCount.h"
 
 template<typename T>
 struct Node
