@@ -3,7 +3,7 @@
 
 struct RefCount
 {
-    RefCount(unsigned c):
+    RefCount(atomic_t c):
     count(c)
     {
     }
