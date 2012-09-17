@@ -1,5 +1,5 @@
-#ifndef _atomic_32_h
-#define _atomic_32_h
+#ifndef _ATOMIC_32_H
+#define _ATOMIC_32_H
 
 typedef int spinlock_t;
 typedef int atomic_t;

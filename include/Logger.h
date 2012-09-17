@@ -5,11 +5,11 @@
 #include <string>
 
 #include "atomic.h"
+#include "logger.h"
 
 class Logger
 {
 public:
-    typedef std::ostream& (*manip_type)(std::ostream&);
 
     //TODO: handle MT
     static Logger& getInstance()
@@ -28,12 +28,6 @@ public:
         std::cout  << m;
         return *this;
     }
-    
-    Logger& operator<<(manip_type pfn) 
-    {       
-        std::cout  << pfn;
-        return *this; 
-    }    
 
 private:
     Logger()
@@ -50,10 +44,23 @@ Logger& operator << (Logger& logger, T t)
     return logger;
 }
 
-#define debug(msg)\
-       Logger& logger = Logger::getInstance(); logger  <<  __FUNCTION__ << ":" << __LINE__ << ":::" <<  msg; logger
+#define debug(msg)\       
+         Logger& logger = Logger::getInstance(); logger  <<  __FUNCTION__ << ":" << __LINE__ << ":::" <<  msg; logger \       
+        
+
+
+typedef int tracepoint;
+
+struct trace_desc {
+  tracepoint *point;
+  unsigned long jump_from;
+  unsigned long jump_to;
+} __attribute__((packed));
+
+void enable(tracepoint *point) ;
 
 #define eol std::endl
+
 
 #endif
 

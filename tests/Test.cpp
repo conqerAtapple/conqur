@@ -7,7 +7,7 @@
 
 #include "LFQueue.h"
 #include "TestIntervalTree.h"
-
+#include "SkipList.h"
 
 #define PRODS 10
 #define CONS 10
@@ -46,7 +46,7 @@ void* run_deq(void*)
 
 void testLfQueue()
 {   
-
+    debug("\n");
    // pthread_once(&once_control, cb_init);
     pthread_t pr_threads[PRODS];
     pthread_t cr_threads[CONS];
@@ -88,9 +88,22 @@ void testIntervalTree()
   testNames();
 }
 
-int main()
+void testSkipList()
 {
-   
+    SkipList<int> sList(5);
+    sList.add(3);
+    sList.add(4);
+    sList.add(5);
+    sList.add(2);
+    sList.add(3);
+}
+
+int main()
+{   
+    //TRACE(main_entry, "main");
+    //debug("main");
+    //printf("main\n");    
     testLfQueue();
+    testSkipList();
     return 0;
 }
