@@ -12,6 +12,7 @@ LINK_DIRECTORIES(
 )
 add_executable(tests 
 		TestIntervalTree.cpp
+		TestLinkedList.cpp
 		Test.cpp
 		)
 

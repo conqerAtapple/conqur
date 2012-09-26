@@ -7,6 +7,7 @@
 
 #include "LFQueue.h"
 #include "TestIntervalTree.h"
+#include "TestLinkedList.h"
 #include "SkipList.h"
 
 #define PRODS 10
@@ -98,12 +99,19 @@ void testSkipList()
     sList.add(3);
 }
 
+void testLinkedList()
+{
+    testCreate();
+}
+
 int main()
 {   
     //TRACE(main_entry, "main");
     //debug("main");
     //printf("main\n");    
-    testLfQueue();
-    testSkipList();
+    //testLfQueue();
+    //testSkipList();
+
+    testLinkedList();
     return 0;
 }
