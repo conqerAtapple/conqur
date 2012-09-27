@@ -9,6 +9,8 @@
 template <typename T>
 struct ListNode
 {
+    typedef T value_type;
+
     ListNode(const T& v):value(v), next(NULL)
     {
     }
@@ -20,12 +22,15 @@ struct ListNode
 
     ListNode *next;
     T value;
+
 } ALIGNED_CACHELINE;
 
 template <typename T>
 class LinkedList
 {
 public:
+    typedef T value_type;
+
     LinkedList():head(NULL)
     {
     }
@@ -34,7 +39,7 @@ public:
     {
     }
 
-    bool insert(const T& item)
+    bool insert(const value_type& item)
     {
         ListNode<T> *newNode = new ListNode<T>(item);
         if(head == NULL)
@@ -73,7 +78,7 @@ public:
         }
     }
 
-    size_t removeAll(const T& value)
+    size_t removeAll(const value_type& value)
     {
         struct ListNode<T> *curr = head, *last = NULL ;
         size_t dCount = 0;
