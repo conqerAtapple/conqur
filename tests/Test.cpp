@@ -102,6 +102,7 @@ void testSkipList()
 void testLinkedList()
 {
     testCreate();
+    testSplit();
 }
 
 int main()

@@ -4,6 +4,7 @@
 #include "LinkedList.h"
 
 void testCreate();
+void testSplit();
 
 
 #endif
