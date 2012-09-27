@@ -5,6 +5,7 @@
 
 void testCreate();
 void testSplit();
+void testRemoveAll();
 
 
 #endif

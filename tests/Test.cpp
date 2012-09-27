@@ -103,6 +103,7 @@ void testLinkedList()
 {
     testCreate();
     testSplit();
+    testRemoveAll();
 }
 
 int main()

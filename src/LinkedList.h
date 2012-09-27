@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include "compiler.h"
+#include "Logger.h"
 
 
 template <typename T>
@@ -10,6 +11,11 @@ struct ListNode
 {
     ListNode(const T& v):value(v), next(NULL)
     {
+    }
+
+    ~ListNode()
+    {
+        debug("deleting") << value;
     }
 
     ListNode *next;
@@ -65,6 +71,39 @@ public:
             head2->next = head1 ? head1->next : NULL;
             head2 = head2->next;
         }
+    }
+
+    size_t removeAll(const T& value)
+    {
+        struct ListNode<T> *curr = head, *last = NULL ;
+        size_t dCount = 0;
+        while(curr)
+        {
+            if(curr->value == value)
+            {
+                if(curr == head)
+                {
+                    head = curr->next;
+                    delete curr;
+                    curr = head;
+                    last = NULL;
+                    dCount++;
+                    continue;
+                }
+                else
+                {
+                    last->next = curr->next;
+                    delete curr;
+                    curr = last->next;
+                    dCount++;
+                    continue;
+                }
+            }
+            last = curr;
+            curr = curr->next;
+        }
+
+        return  dCount;
     }
 
     friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
