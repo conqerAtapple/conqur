@@ -87,7 +87,7 @@ private:
     
     void addEdgesToVertice(VerticeType *v, VerticeEdgeType *edgeHead)
     {
-
+        
 
 
     }
