@@ -6,5 +6,7 @@ include_directories(
 
 add_library(conqur 
 	Logger.cpp
+	GraphFactory.cpp
+	FileGraphLoader.cpp
 	)
 

@@ -112,7 +112,7 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
-    {        
+    {
         ListNode<T> *currNode = list.head;;
         out << std::endl << "list :";
         while(currNode)
@@ -128,8 +128,69 @@ public:
         out << std::endl;
         return out;
     }
-   
+
     struct ListNode<T> *head;
 };
 
+template <typename T>
+class LinkedList<T*>
+{
+public:
+    typedef T* value_type;
+
+    friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
+    {
+        ListNode<value_type> *currNode = list.head;
+        out << std::endl << "list :";
+        while(currNode)
+        {
+            if(currNode != list.head)
+                out << "-->";
+
+            // out << "(" << currNode << ")" << *(currNode->value);
+            out << *(currNode->value);
+            currNode = currNode->next;
+        }
+
+        out << "--> null";
+        out << std::endl;
+        return out;
+    }
+
+    bool insertSortedUnique(const value_type& item, ListNode<value_type>** insertNode)
+    {
+        ListNode<value_type> **ppHead = &head;
+        ListNode<value_type> *curr = head, *last = NULL;
+
+        while((curr != NULL) && (*(curr->value) < *item))
+        {
+            last = curr;
+            curr = curr->next;
+        }
+
+        if((curr != NULL) && *(curr->value) == *item)
+        {
+            *insertNode = curr;
+            return false;
+        }
+
+        ListNode<value_type> *newNode =  new ListNode<value_type>(item) ;
+        newNode->next = curr;
+        if(last)
+        {
+            last->next =newNode;
+        }
+
+        if(*ppHead == curr)
+        {
+            *ppHead = newNode;
+        }
+
+        std::cout << *this;
+        return true;
+
+    }
+
+    struct ListNode<value_type> *head;
+};
 #endif 

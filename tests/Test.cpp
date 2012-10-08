@@ -7,6 +7,7 @@
 
 #include "LFQueue.h"
 #include "TestIntervalTree.h"
+#include "TestGraph.h"
 #include "TestLinkedList.h"
 #include "SkipList.h"
 
@@ -106,6 +107,12 @@ void testLinkedList()
     testRemoveAll();
 }
 
+
+void testGraph()
+{
+    testFileGraphLoader("graph.txt");
+}
+
 int main()
 {   
     //TRACE(main_entry, "main");
@@ -114,6 +121,7 @@ int main()
     //testLfQueue();
     //testSkipList();
 
-    testLinkedList();
+   // testLinkedList();
+    testGraph();
     return 0;
 }
