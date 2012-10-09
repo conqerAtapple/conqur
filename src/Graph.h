@@ -11,7 +11,25 @@ class vertice;
 template <typename T>
 class edge
 {
+public:
     struct vertice<T> *vertex;
+
+     bool operator==(const edge<T>& rhs)
+    {
+        return (this->vertex->value == rhs.vertex->value);
+    }
+   
+    bool operator <(const edge<T>& rhs)
+    {
+        return this->vertex->value < rhs.vertex->value;
+    }
+
+     friend std::ostream& operator<<(std::ostream& out, const edge& v)
+    {
+        out << "{";
+        out << v.vertex->value;
+        out << "}";
+    }
 };
 
 template <typename T>
@@ -21,7 +39,7 @@ public:
 
     typedef T value_type;
     typedef edge<T> Edge_t;
-    typedef LinkedList<struct edge<T> > EdgeList_t;
+    typedef LinkedList<edge<T>* > EdgeList_t;
 
     bool operator==(const vertice<T>& rhs)
     {
@@ -41,7 +59,7 @@ public:
     }
 
     value_type value;
-    EdgeList_t edgeHead;
+    EdgeList_t edgeList;
 };
 
 template <typename T>
@@ -59,7 +77,7 @@ public:
     bool addVertex(VerticeType* v, VerticeEdgeType *edgeList)
     {
         assert(v);
-        assert(edgeHead);
+        assert(edgeList);
 
         ListNode<VerticeType*> *insertNode = NULL;
         verticeList.insertSortedUnique(v, &insertNode);
@@ -67,7 +85,7 @@ public:
         if(insertNode != NULL)
         {
             debug("found existing vertice") << *(insertNode->value);
-            addEdgesToVertice(insertNode, edgeList);
+            addEdgesToVertice(insertNode->value, edgeList);
         }
         else
         {
@@ -85,11 +103,15 @@ private:
     // Methods
     // //////
     
-    void addEdgesToVertice(VerticeType *v, VerticeEdgeType *edgeHead)
+    void addEdgesToVertice(VerticeType *v, VerticeEdgeType *edgeList)
     {
-        
+        typename VerticeEdgeType::node_type *curr = edgeList->head, *insNode;
 
-
+        while(curr)
+        {
+            v->edgeList.insertSortedUnique(curr->value, &insNode);
+            curr = curr->next;
+        }
     }
 
 };

@@ -7,8 +7,9 @@
 
 
 template <typename T>
-struct ListNode
+class ListNode
 {
+public:
     typedef T value_type;
 
     ListNode(const T& v):value(v), next(NULL)
@@ -30,6 +31,7 @@ class LinkedList
 {
 public:
     typedef T value_type;
+    typedef ListNode<value_type> node_type;
 
     LinkedList():head(NULL)
     {
@@ -137,10 +139,11 @@ class LinkedList<T*>
 {
 public:
     typedef T* value_type;
+    typedef ListNode<value_type> node_type;
 
     friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
     {
-        ListNode<value_type> *currNode = list.head;
+        node_type *currNode = list.head;
         out << std::endl << "list :";
         while(currNode)
         {
@@ -159,8 +162,8 @@ public:
 
     bool insertSortedUnique(const value_type& item, ListNode<value_type>** insertNode)
     {
-        ListNode<value_type> **ppHead = &head;
-        ListNode<value_type> *curr = head, *last = NULL;
+        node_type **ppHead = &head;
+        node_type *curr = head, *last = NULL;
 
         while((curr != NULL) && (*(curr->value) < *item))
         {
@@ -174,7 +177,7 @@ public:
             return false;
         }
 
-        ListNode<value_type> *newNode =  new ListNode<value_type>(item) ;
+        node_type *newNode =  new ListNode<value_type>(item) ;
         newNode->next = curr;
         if(last)
         {
@@ -186,11 +189,10 @@ public:
             *ppHead = newNode;
         }
 
-        std::cout << *this;
         return true;
 
     }
 
-    struct ListNode<value_type> *head;
+    node_type *head;
 };
 #endif 
