@@ -5,13 +5,35 @@
 #include "compiler.h"
 #include "Logger.h"
 
+template <typename T>
+struct NodeComparator
+{
+    typedef T value_type;
+
+    static bool less_than(value_type a, value_type b)
+    {
+        return (a < b);
+    }
+};
+
+
+template <typename T>
+struct NodeComparator<T*>
+{
+    typedef T* value_type;
+
+    static bool less_than(value_type a, value_type b)
+    {
+        return (*a < *b);
+    }
+};
 
 template <typename T>
 class ListNode
 {
 public:
     typedef T value_type;
-
+    
     ListNode(const T& v):value(v), next(NULL)
     {
     }
@@ -32,6 +54,7 @@ class LinkedList
 public:
     typedef T value_type;
     typedef ListNode<value_type> node_type;
+    typedef NodeComparator<value_type> Comparator;
 
     LinkedList():head(NULL)
     {
@@ -58,6 +81,55 @@ public:
         *currNode = newNode;
 
         return true;
+    }
+
+    /*
+    bool insertUniqueSorted(LinkedList<T>& rhs)
+    {
+        node_type *currRhs = rhs.head, *insNode;
+        
+        while(currRhs)
+        {
+            insertUniqueSorted(currRhs->value, &insNode);
+            currRhs = currRhs->next;
+        }
+
+        return true;
+    }
+    */
+
+    bool insertUniqueSorted(const value_type& item, node_type **insertNode)
+    {
+        node_type **ppHead = &head;
+        node_type *curr = head, *last = NULL;
+
+        //while((curr != NULL) && (curr->value < item))
+        while((curr != NULL) && Comparator::less_than(curr->value, item))
+        {
+            last = curr;
+            curr = curr->next;
+        }
+
+        if((curr != NULL) && (curr->value == item))
+        {
+            *insertNode = last;
+            return false;
+        }
+
+        node_type *newNode =  new ListNode<value_type>(item) ;
+        newNode->next = curr;
+        if(last)
+        {
+            last->next =newNode;
+        }
+
+        if(*ppHead == curr)
+        {
+            *ppHead = newNode;
+        }
+
+        return true;
+
     }
 
     void split(LinkedList& first, LinkedList& second)
@@ -116,7 +188,7 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
     {
         ListNode<T> *currNode = list.head;;
-        out << std::endl << "list :";
+
         while(currNode)
         {
             if(currNode != list.head)
@@ -127,7 +199,6 @@ public:
         }
 
         out << "--> null";
-        out << std::endl;
         return out;
     }
 
@@ -144,23 +215,23 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
     {
         node_type *currNode = list.head;
-        out << std::endl << "list :";
         while(currNode)
         {
             if(currNode != list.head)
                 out << "-->";
 
-            // out << "(" << currNode << ")" << *(currNode->value);
-            out << *(currNode->value);
+            // out << "(" << currNode->value << ")" << *(currNode->value);
+            out << (currNode->value);
+            // out << *(currNode->value);
             currNode = currNode->next;
         }
 
         out << "--> null";
-        out << std::endl;
+
         return out;
     }
 
-    bool insertSortedUnique(const value_type& item, ListNode<value_type>** insertNode)
+    bool insertUniqueSorted(const value_type& item, ListNode<value_type>** insertNode)
     {
         node_type **ppHead = &head;
         node_type *curr = head, *last = NULL;
@@ -173,7 +244,7 @@ public:
 
         if((curr != NULL) && *(curr->value) == *item)
         {
-            *insertNode = curr;
+            *insertNode = last;
             return false;
         }
 
@@ -191,6 +262,64 @@ public:
 
         return true;
 
+    }
+
+    bool  insertUniqueAt(ListNode<value_type>* insertNode, const value_type& item)
+    {
+        if(insertNode == NULL)
+        {
+            node_type *insNode;
+            return insertUniqueSorted(item, &insNode);
+        }
+
+        node_type **ppHead = &head;
+        node_type *curr = insertNode, *last = NULL;
+
+        while((curr != NULL) && (*(curr->value) < *item))
+        {
+            last = curr;
+            curr = curr->next;
+        }
+
+        if((curr != NULL) && *(curr->value) == *item)
+        {
+            return false;;
+        }
+
+        node_type *newNode =  new ListNode<value_type>(item) ;
+        newNode->next = curr;
+        if(last)
+        {
+            last->next =newNode;
+        }
+
+        if(*ppHead == curr)
+        {
+            *ppHead = newNode;
+        }
+
+        return true;
+    }
+
+    bool findFirst(const value_type& item, ListNode<value_type>** insertNode)
+    {
+        node_type **ppHead = &head;
+        node_type *curr = head, *last = NULL;
+
+        while((curr != NULL) && (*(curr->value) < *item))
+        {
+            last = curr;
+            curr = curr->next;
+        }
+
+        if((curr != NULL) && *(curr->value) == *item)
+        {
+            *insertNode = curr;
+            return true;
+        }
+
+        *insertNode = last;
+        return false;
     }
 
     node_type *head;

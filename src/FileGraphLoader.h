@@ -22,79 +22,69 @@ public:
 private:
     std::string fileName;
 
-    void parseLine(const std::string& line, Graph<int> **out)
+    void parseEdges(const char** txt, Graph<int> *g, int v)
     {
-        const char* pch = line.c_str();
-        char tmp[100];
+        const char* pch = *txt;
         int i = 0;
-
-       // Graph<int> *pOut = new Graph<int>();
-        
+        char tmp[100];
         while(*pch)
         {
             i=0;
-            while((*pch) && (*pch != ':' ))
+            while((*pch) && (*pch != ',' ))
             {
-                debug ("*pch :") << *pch;
+                //debug ("*pch :") << *pch;
                 if(*pch >= '0' && *pch <= '9')
                 {
                     tmp[i++] = *pch;
                 }
                 pch++;
             }
-            if(! (*pch))
-                break;
+            tmp[i] = 0; 
+            //debug("tmp:") << tmp;
+            vertice<int>::Edge_t edge;
+            g->addEdge(v, edge, atoi(tmp));
+            
+            if(*pch)
+                pch++;
+         }
+        *txt = pch;
+    }
 
-            tmp[i] = 0;       
-            vertice<int> *pVertex = new  vertice<int>();
+    void parseLine(const std::string& line, Graph<int> **out)
+    {
+        const char* pch = line.c_str();
+        char tmp[100];
+        int i = 0;
+       
+        while(*pch)
+        {
+            i=0;
+            while((*pch) && (*pch != ':' ))
+            {
+                //debug ("*pch :") << *pch;
+                if(*pch >= '0' && *pch <= '9')
+                {
+                    tmp[i++] = *pch;
+                }
+                pch++;
+            }
+           
+            tmp[i] = 0;     
+            //debug("tmp :") << tmp;
+
+            vertice<int> *pVertex = new vertice<int>();
             pVertex->value = atoi(tmp);
-            vertice<int>::EdgeList_t *pEdgeHead = new  vertice<int>::EdgeList_t();
+            parseEdges(&pch, *out, pVertex->value);
+            
+            (*out)->addVertex(pVertex);
 
-
-            (*out)->addVertex(pVertex, pEdgeHead);
-
-            // debug("vertice id:") << verticeId;
-            pch++;
+            if(*pch)
+            {                
+                pch++;
+            }
         }
     }
 
 };
 
-/*
-template<>
-void FileGraphLoader::parseLine(const std::string& line, Graph<int> **out)
-{
-    const char* pch = line.c_str();
-    char tmp[100];
-    int i = 0;
-
-    Graph<int> *pOut = new Graph<int>();
-    while(*pch)
-    {
-        i=0;
-        while((*pch) && (*pch != ':' ))
-        {
-            debug ("*pch :") << *pch;
-            if(*pch >= '0' && *pch <= '9')
-            {
-                tmp[i++] = *pch;
-            }
-            pch++;
-        }
-        if(! (*pch))
-            break;
-
-        tmp[i] = 0;       
-        // struct vertice<int> *pVertex = new  vertice<int>();
-        // pVertex->value = atoi(tmp);
-        // vertice<int>::EdgeListHead *pEdgeHead = new  vertice<int>::EdgeListHead() ;
-
-
-        //(*out)->addVertex(pVertex, pEdgeHead);
-
-        // debug("vertice id:") << verticeId;
-        pch++;
-    }
-}
-*/
 #endif
