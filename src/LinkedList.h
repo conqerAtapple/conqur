@@ -14,6 +14,11 @@ struct NodeComparator
     {
         return (a < b);
     }
+
+    static bool equals(value_type a, value_type b)
+    {
+        return (a == b);
+    }
 };
 
 
@@ -25,6 +30,11 @@ struct NodeComparator<T*>
     static bool less_than(value_type a, value_type b)
     {
         return (*a < *b);
+    }
+
+    static bool equals(value_type a, value_type b)
+    {
+        return (*a == *b);
     }
 };
 
@@ -83,34 +93,18 @@ public:
         return true;
     }
 
-    /*
-    bool insertUniqueSorted(LinkedList<T>& rhs)
-    {
-        node_type *currRhs = rhs.head, *insNode;
-        
-        while(currRhs)
-        {
-            insertUniqueSorted(currRhs->value, &insNode);
-            currRhs = currRhs->next;
-        }
-
-        return true;
-    }
-    */
-
     bool insertUniqueSorted(const value_type& item, node_type **insertNode)
     {
         node_type **ppHead = &head;
         node_type *curr = head, *last = NULL;
 
-        //while((curr != NULL) && (curr->value < item))
         while((curr != NULL) && Comparator::less_than(curr->value, item))
         {
             last = curr;
             curr = curr->next;
         }
 
-        if((curr != NULL) && (curr->value == item))
+        if((curr != NULL) && Comparator::equals(curr->value, item))
         {
             *insertNode = last;
             return false;
@@ -129,7 +123,6 @@ public:
         }
 
         return true;
-
     }
 
     void split(LinkedList& first, LinkedList& second)
@@ -203,67 +196,6 @@ public:
     }
 
     struct ListNode<T> *head;
-};
-
-template <typename T>
-class LinkedList<T*>
-{
-public:
-    typedef T* value_type;
-    typedef ListNode<value_type> node_type;
-
-    friend std::ostream& operator<<(std::ostream& out, const LinkedList& list)
-    {
-        node_type *currNode = list.head;
-        while(currNode)
-        {
-            if(currNode != list.head)
-                out << "-->";
-
-            // out << "(" << currNode->value << ")" << *(currNode->value);
-            out << (currNode->value);
-            // out << *(currNode->value);
-            currNode = currNode->next;
-        }
-
-        out << "--> null";
-
-        return out;
-    }
-
-    bool insertUniqueSorted(const value_type& item, ListNode<value_type>** insertNode)
-    {
-        node_type **ppHead = &head;
-        node_type *curr = head, *last = NULL;
-
-        while((curr != NULL) && (*(curr->value) < *item))
-        {
-            last = curr;
-            curr = curr->next;
-        }
-
-        if((curr != NULL) && *(curr->value) == *item)
-        {
-            *insertNode = last;
-            return false;
-        }
-
-        node_type *newNode =  new ListNode<value_type>(item) ;
-        newNode->next = curr;
-        if(last)
-        {
-            last->next =newNode;
-        }
-
-        if(*ppHead == curr)
-        {
-            *ppHead = newNode;
-        }
-
-        return true;
-
-    }
-
     bool  insertUniqueAt(ListNode<value_type>* insertNode, const value_type& item)
     {
         if(insertNode == NULL)
@@ -275,13 +207,13 @@ public:
         node_type **ppHead = &head;
         node_type *curr = insertNode, *last = NULL;
 
-        while((curr != NULL) && (*(curr->value) < *item))
+        while((curr != NULL) && (Comparator::less_than(curr->value, item)))
         {
             last = curr;
             curr = curr->next;
         }
 
-        if((curr != NULL) && *(curr->value) == *item)
+        if((curr != NULL) && (Comparator::equals(curr->value, item)))
         {
             return false;;
         }
@@ -306,13 +238,13 @@ public:
         node_type **ppHead = &head;
         node_type *curr = head, *last = NULL;
 
-        while((curr != NULL) && (*(curr->value) < *item))
+        while((curr != NULL) && (Comparator::less_than(curr->value, item)))
         {
             last = curr;
             curr = curr->next;
         }
 
-        if((curr != NULL) && *(curr->value) == *item)
+        if((curr != NULL) && (Comparator::equals(curr->value, item)))
         {
             *insertNode = curr;
             return true;
@@ -322,6 +254,6 @@ public:
         return false;
     }
 
-    node_type *head;
 };
-#endif 
+
+#endif
